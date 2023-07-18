@@ -22,7 +22,6 @@ const addNewTask = () => {
 
 <template>
   <Field
-    autofocus
     type="text"
     placeholder="Enter a task. Press enter to save."
     icon="fa-regular fa-square-plus"

@@ -5,7 +5,11 @@ const props = defineProps({
   invalid: Boolean,
 });
 
-const emit = defineEmits(["update:modelValue", "enterPressed"]);
+const emit = defineEmits(["update:modelValue", "enterPressed", "lostFocus"]);
+
+const vFocus = {
+  mounted: (el) => el.focus(),
+};
 </script>
 
 <template>
@@ -25,8 +29,10 @@ const emit = defineEmits(["update:modelValue", "enterPressed"]);
         'focus:ring-red-500': props.invalid,
       }"
       :value="props.modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @keydown.enter="$emit('enterPressed')"
+      @input="emit('update:modelValue', $event.target.value)"
+      @keydown.enter="emit('enterPressed', $event.target.value)"
+      @blur="emit('lostFocus', $event.target.value)"
+      v-focus
     />
   </div>
 </template>

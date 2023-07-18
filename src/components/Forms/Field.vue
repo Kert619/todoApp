@@ -2,7 +2,7 @@
 import Input from "./Input.vue";
 import Label from "./Label.vue";
 import ErrorMessage from "./ErrorMessage.vue";
-const emit = defineEmits(["update:modelValue", "enter-pressed"]);
+const emit = defineEmits(["update:modelValue", "enterPressed", "lostFocus"]);
 
 const props = defineProps({
   label: String,
@@ -11,10 +11,6 @@ const props = defineProps({
   error: String,
   modelValue: String,
 });
-
-const handleInputUpdate = (newValue) => {
-  emit("update:modelValue", newValue);
-};
 </script>
 
 <template>
@@ -31,8 +27,9 @@ const handleInputUpdate = (newValue) => {
     :icon="props.icon"
     :invalid="!!props.error"
     :model-value="modelValue"
-    @update:model-value="handleInputUpdate"
-    @enter-pressed="$emit('enter-pressed')"
+    @update:model-value="emit('update:modelValue', $event)"
+    @enter-pressed="emit('enterPressed', $event)"
+    @lost-focus="emit('lostFocus', $event)"
   />
   <ErrorMessage v-if="!!props.error">{{ props.error }}</ErrorMessage>
 </template>
