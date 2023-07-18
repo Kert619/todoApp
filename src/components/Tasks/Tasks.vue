@@ -1,6 +1,6 @@
 <script setup>
 import TaskItem from "./TaskItem.vue";
-const emit = defineEmits(["updated", "remove"]);
+const emit = defineEmits(["updated", "remove", "completed"]);
 const props = defineProps({
   tasks: Array,
   show: {
@@ -18,6 +18,7 @@ const props = defineProps({
       :key="task.id"
       @updated="emit('updated', $event)"
       @remove="emit('remove', $event)"
+      @completed="emit('completed', $event)"
     />
   </ul>
 </template>

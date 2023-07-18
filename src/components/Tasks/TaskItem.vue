@@ -8,7 +8,7 @@ const props = defineProps({
   task: Object,
 });
 
-const emit = defineEmits(["updated", "remove"]);
+const emit = defineEmits(["updated", "remove", "completed"]);
 
 const isEdit = ref(false);
 const onLostFocus = () => {
@@ -19,6 +19,11 @@ const updateTask = (event) => {
   const updatedTask = { ...props.task, name: event };
   isEdit.value = false;
   emit("updated", updatedTask);
+};
+
+const markAsCompleted = (event) => {
+  const updatedTask = { ...props.task, is_completed: event };
+  emit("completed", updatedTask);
 };
 
 const removeTask = () => {
@@ -42,6 +47,7 @@ const removeTask = () => {
         :checked="props.task.is_completed"
         class="font-bold"
         :class="{ 'line-through': props.task.is_completed }"
+        @update:model-value="markAsCompleted"
         v-if="!isEdit"
       />
 

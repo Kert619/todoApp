@@ -5,7 +5,13 @@ import Tasks from "../components/Tasks/Tasks.vue";
 import NewTask from "../components/Tasks/NewTask.vue";
 import Loading from "../components/Loading.vue";
 import Error from "../components/Error.vue";
-import { allTasks, createTask, updateTask, removeTask } from "../http/task-api";
+import {
+  allTasks,
+  createTask,
+  updateTask,
+  removeTask,
+  completeTask,
+} from "../http/task-api";
 import { onMounted } from "vue";
 
 const tasks = ref([]);
@@ -86,6 +92,25 @@ const handleDeleteTask = async (id) => {
     showLoading.value = false;
   }
 };
+
+const handleCompletedTask = async (task) => {
+  try {
+    showLoading.value = true;
+    showError.value = false;
+    const { data: updatedTask } = await completeTask(task.id, {
+      is_completed: task.is_completed,
+    });
+
+    const currentTask = tasks.value.find((item) => item.id == task.id);
+    currentTask.is_completed = updatedTask.data.is_completed;
+  } catch (err) {
+    showError.value = true;
+    error.value =
+      "Error updating the status of the task. Please try again later.";
+  } finally {
+    showLoading.value = false;
+  }
+};
 </script>
 
 <template>
@@ -102,6 +127,7 @@ const handleDeleteTask = async (id) => {
         :tasks="uncompletedTasks"
         @updated="handleUpdatedTask"
         @remove="handleDeleteTask"
+        @completed="handleCompletedTask"
       />
 
       <div class="text-center mt-6" v-show="hasCompletedTasks">
@@ -119,6 +145,7 @@ const handleDeleteTask = async (id) => {
         :show="showCompletedTasks && hasCompletedTasks"
         @updated="handleUpdatedTask"
         @remove="handleDeleteTask"
+        @completed="handleCompletedTask"
       />
     </div>
   </main>
