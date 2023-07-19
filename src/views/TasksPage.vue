@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import Button from "../components/Forms/Button.vue";
 import Tasks from "../components/Tasks/Tasks.vue";
 import NewTask from "../components/Tasks/NewTask.vue";
@@ -13,6 +13,11 @@ import {
   completeTask,
 } from "../http/task-api";
 import { onMounted } from "vue";
+import { useTaskStore } from "@/stores/task";
+import { storeToRefs } from "pinia";
+
+const store = useTaskStore();
+const { task } = reactive(store);
 
 const tasks = ref([]);
 const error = ref(null);
