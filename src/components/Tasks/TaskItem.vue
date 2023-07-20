@@ -3,22 +3,32 @@ import { ref } from "vue";
 import Check from "../Forms/Check.vue";
 import TaskActions from "../Tasks/TaskActions.vue";
 import Input from "../Forms/Input.vue";
+import { useTaskStore } from "../../stores/task";
+import { storeToRefs } from "pinia";
+
+const store = useTaskStore();
+const { showLoading } = storeToRefs(store);
+const { handleUpdatedTask } = store;
 
 const props = defineProps({
   task: Object,
 });
-
-const emit = defineEmits(["updated", "remove", "completed"]);
 
 const isEdit = ref(false);
 const onLostFocus = () => {
   setTimeout(() => (isEdit.value = false), 150);
 };
 
-const updateTask = (event) => {
-  const updatedTask = { ...props.task, name: event };
-  isEdit.value = false;
-  emit("updated", updatedTask);
+const updateTask = async (event) => {
+  try {
+    showLoading.value = true;
+    const updatedTask = { ...props.task, name: event };
+    isEdit.value = false;
+    await handleUpdatedTask(updatedTask);
+  } catch (err) {
+  } finally {
+    showLoading.value = false;
+  }
 };
 
 const markAsCompleted = (event) => {

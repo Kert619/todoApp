@@ -2,7 +2,6 @@
 const props = defineProps({
   icon: String,
   modelValue: String,
-  invalid: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue", "enterPressed", "lostFocus"]);
@@ -25,8 +24,6 @@ const vFocus = {
       class="w-full text-slate-800 rounded border-0 ring-1 ring-gray-400 focus:ring-indigo-500"
       :class="{
         'pl-10': props.icon,
-        'ring-red-500': props.invalid,
-        'focus:ring-red-500': props.invalid,
       }"
       :value="props.modelValue"
       @input="emit('update:modelValue', $event.target.value)"

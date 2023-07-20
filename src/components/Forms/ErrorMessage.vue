@@ -1,5 +1,5 @@
 <template>
-  <p class="mt-1 text-sm text-red-600">
-    <slot />
+  <p class="mt-2 text-sm text-red-600" v-bind="$attrs">
+    <slot></slot>
   </p>
 </template>

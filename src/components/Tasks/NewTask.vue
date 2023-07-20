@@ -1,27 +1,42 @@
 <script setup>
 import { reactive, ref } from "vue";
-import Field from "../Forms/Field.vue";
+import Input from "../Forms/Input.vue";
+import Loading from "../Loading.vue";
+import Error from "../Error.vue";
+import { useTaskStore } from "../../stores/task";
 
+const showLoading = ref(false);
+const showError = ref(false);
+const error = ref("");
+const store = useTaskStore();
+const { handleAddedTask } = store;
+
+const task = ref("");
 const newTask = reactive({
   name: "",
   is_completed: false,
 });
 
-const task = ref("");
-
-const emit = defineEmits(["added"]);
-
-const addNewTask = () => {
-  if (task.value.trim()) {
-    newTask.name = task.value.trim();
+const addNewTask = async () => {
+  try {
+    showLoading.value = true;
+    showError.value = false;
+    if (task.value.trim()) {
+      newTask.name = task.value;
+      await handleAddedTask(newTask);
+    }
+  } catch (err) {
+    error.value = "Error adding task. Please try again later.";
+    showError.value = true;
+  } finally {
     task.value = "";
-    emit("added", newTask);
+    showLoading.value = false;
   }
 };
 </script>
 
 <template>
-  <Field
+  <Input
     type="text"
     placeholder="Enter a task. Press enter to save."
     icon="fa-regular fa-square-plus"
@@ -29,4 +44,6 @@ const addNewTask = () => {
     v-model="task"
     @enter-pressed="addNewTask"
   />
+  <Loading v-if="showLoading" />
+  <Error v-if="showError" :error="error" class="mt-3" />
 </template>
