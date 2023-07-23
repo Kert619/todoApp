@@ -1,15 +1,20 @@
 <template>
   <div class="font-nunito">
-    <navbar></navbar>
-    <tasks-page></tasks-page>
-    <app-footer></app-footer>
+    <Navbar />
+    <router-view />
+    <Footer />
   </div>
+
+  <Loading v-if="loading" />
 </template>
 
 <script setup>
 import Navbar from "./components/Navbar.vue";
-import TasksPage from "./views/TasksPage.vue";
-import AppFooter from "./components/Footer.vue";
-</script>
+import Footer from "./components/Footer.vue";
+import Loading from "./components/Loading.vue";
+import { useLoadingStore } from "./stores/loading";
+import { storeToRefs } from "pinia";
 
-<style scoped></style>
+const loadingStore = useLoadingStore();
+const { loading } = storeToRefs(loadingStore);
+</script>

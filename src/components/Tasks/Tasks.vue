@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <ul class="mt-5" v-if="tasks.length > 0 && show">
+  <ul v-if="tasks.length > 0 && show">
     <TaskItem :task="task" v-for="task in tasks" :key="task.id" />
   </ul>
 </template>

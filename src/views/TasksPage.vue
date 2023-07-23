@@ -1,27 +1,29 @@
 <script setup>
 import { computed, ref } from "vue";
-import Button from "../components/Forms/Button.vue";
 import Tasks from "../components/Tasks/Tasks.vue";
 import NewTask from "../components/Tasks/NewTask.vue";
-import Loading from "../components/Loading.vue";
+import Error from "../components/Error.vue";
 import { onMounted } from "vue";
 import { useTaskStore } from "../stores/task";
+import { useErrorStore } from "../stores/error";
 import { storeToRefs } from "pinia";
 
 const store = useTaskStore();
-const { showLoading, completedTasks, uncompletedTasks } = storeToRefs(store);
+const errorStore = useErrorStore();
+
+const { completedTasks, uncompletedTasks } = storeToRefs(store);
+
 const { getAllTasks } = store;
+const { error } = storeToRefs(errorStore);
 
 const hasCompletedTasks = computed(() => completedTasks.value.length > 0);
 const showCompletedTasks = ref(false);
 
 onMounted(async () => {
   try {
-    showLoading.value = true;
     await getAllTasks();
   } catch (err) {
-  } finally {
-    showLoading.value = false;
+    error.value = "Error fetching tasks. Please try again later.";
   }
 });
 </script>
@@ -32,17 +34,18 @@ onMounted(async () => {
   >
     <div class="mt-5 max-w-2xl mx-auto">
       <NewTask />
+      <Error class="mt-2" v-if="!!error">{{ error }}</Error>
 
       <Tasks :tasks="uncompletedTasks" />
 
       <div class="text-center mt-6" v-show="hasCompletedTasks">
-        <Button
-          variant="primary"
+        <button
+          class="btn btn-accent btn-sm text-white"
           @click="showCompletedTasks = !showCompletedTasks"
         >
           <span v-if="!showCompletedTasks">Show Completed</span>
           <span v-else>Hide Completed</span>
-        </Button>
+        </button>
       </div>
 
       <Tasks
@@ -51,6 +54,4 @@ onMounted(async () => {
       />
     </div>
   </main>
-
-  <Loading v-if="showLoading" />
 </template>

@@ -9,7 +9,6 @@ import {
 import { computed, ref } from "vue";
 
 export const useTaskStore = defineStore("task", () => {
-  const showLoading = ref(false);
   const tasks = ref([]);
 
   const uncompletedTasks = computed(() =>
@@ -55,7 +54,6 @@ export const useTaskStore = defineStore("task", () => {
   };
 
   return {
-    showLoading,
     tasks,
     uncompletedTasks,
     completedTasks,

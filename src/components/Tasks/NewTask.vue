@@ -1,15 +1,14 @@
 <script setup>
 import { reactive, ref } from "vue";
-import Input from "../Forms/Input.vue";
-import Loading from "../Loading.vue";
-import Error from "../Error.vue";
 import { useTaskStore } from "../../stores/task";
+import { useErrorStore } from "../../stores/error";
+import { storeToRefs } from "pinia";
 
-const showLoading = ref(false);
-const showError = ref(false);
-const error = ref("");
+const errorStore = useErrorStore();
 const store = useTaskStore();
+
 const { handleAddedTask } = store;
+const { error } = storeToRefs(errorStore);
 
 const task = ref("");
 const newTask = reactive({
@@ -19,31 +18,29 @@ const newTask = reactive({
 
 const addNewTask = async () => {
   try {
-    showLoading.value = true;
-    showError.value = false;
     if (task.value.trim()) {
       newTask.name = task.value;
       await handleAddedTask(newTask);
     }
   } catch (err) {
     error.value = "Error adding task. Please try again later.";
-    showError.value = true;
   } finally {
     task.value = "";
-    showLoading.value = false;
   }
+};
+
+const vFocus = {
+  mounted: (el) => el.focus(),
 };
 </script>
 
 <template>
-  <Input
+  <input
     type="text"
     placeholder="Enter a task. Press enter to save."
-    icon="fa-regular fa-square-plus"
-    :model-value="task"
+    class="input input-bordered w-full focus:outline-blue-500"
     v-model="task"
-    @enter-pressed="addNewTask"
+    @keydown.enter="addNewTask"
+    v-focus
   />
-  <Loading v-if="showLoading" />
-  <Error v-if="showError" :error="error" class="mt-3" />
 </template>

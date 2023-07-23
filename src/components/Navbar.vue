@@ -1,3 +1,9 @@
+<script setup>
+import { ref } from "vue";
+
+const collapsed = ref(false);
+</script>
+
 <template>
   <header
     class="bg-slate-800 p-5 h-[70px] flex items-center fixed top-0 w-full z-50"
@@ -32,34 +38,39 @@
       >
         <ul class="flex flex-col md:flex-row items-center gap-2 md:gap-5">
           <li>
-            <a
-              href=""
+            <router-link
+              :to="{ name: 'tasks' }"
               class="text-gray-300 text-lg font-normal hover:text-gray-400 transition"
-              >Tasks</a
+              >Tasks</router-link
             >
           </li>
           <li>
-            <a
-              href=""
+            <router-link
+              :to="{ name: 'summary' }"
               class="text-gray-300 text-lg font-normal hover:text-gray-400 transition"
-              >Summary</a
+              >Summary</router-link
             >
           </li>
         </ul>
 
         <div class="flex justify-center gap-2">
-          <Button variant="primary-outline" class="self-center">Login</Button>
-          <Button variant="primary" class="self-center">Register</Button>
-          <Button variant="primary-outline" class="self-center">Logout</Button>
+          <router-link
+            :to="{ name: 'login' }"
+            class="btn btn-sm btn-info btn-outline rounded"
+            >Login</router-link
+          >
+          <router-link
+            :to="{ name: 'register' }"
+            class="btn btn-sm btn-info rounded"
+            >Register</router-link
+          >
+          <router-link
+            :to="{ name: 'login' }"
+            class="btn btn-sm btn-info btn-outline rounded"
+            >Logout</router-link
+          >
         </div>
       </div>
     </nav>
   </header>
 </template>
-
-<script setup>
-import { ref } from "vue";
-import Button from "./Forms/Button.vue";
-
-const collapsed = ref(false);
-</script>

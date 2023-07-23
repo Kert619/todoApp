@@ -2,26 +2,6 @@
   <div
     class="mt-[70px] h-[calc(100vh-140px)] w-screen fixed flex items-center justify-center bg-slate-800 bg-opacity-80 text-white left-0 top-0 z-50"
   >
-    <div class="loader"></div>
+    <span class="loading loading-spinner loading-lg"></span>
   </div>
 </template>
-
-<style scoped>
-.loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-</style>
